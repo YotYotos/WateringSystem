@@ -4,12 +4,17 @@
 #include <Arduino.h>
 
 class Sensor {
+protected:
+
+    const int PIN; // Pin number associated with the sensor, can be used for initialization or reading data
+
 public:
 
-    Sensor() {} // Default constructor, empty for now, can be expanded later if needed
-    virtual ~Sensor() = default; // Virtual destructor for proper cleanup of derived classes
+    Sensor(int sensorPin = 3); // Default constructor, empty for now, can be expanded later if needed
 
-    virtual String readinfo() = 0; // Pure virtual function to be implemented by derived classes
+    virtual ~Sensor(); // Virtual destructor for proper cleanup of derived classes
+
+    virtual String readinfo(); // Pure virtual function to be implemented by derived classes
 };
 
 #endif

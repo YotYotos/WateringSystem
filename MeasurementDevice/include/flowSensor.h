@@ -7,40 +7,19 @@
 
 class FlowSensorFS300A : public Sensor { // Inherit from Sensor
 private:
-    const uint8_t pin;
-    volatile uint32_t pulseCount;
-    unsigned long lastTime;
+    volatile uint32_t pulseCount; // Use volatile for variables modified in ISR to prevent compiler optimizations that could lead to incorrect behavior
+    unsigned long lastTime; // Store the last time to ensure accurate flow rate calculation
+    String lastFlowRate; // Store the last calculated flow rate to return when readinfo is called before the next calculation
 
-    // Calibration factor from datasheet
-    const float k = 7.5; // adjust if needed
+    const float CalibrationFactor; // Calibration factor for the flow sensor
 
-    static void pulseCounterISR(void* arg) {
-        FlowSensorFS300A* self = (FlowSensorFS300A*)arg;
-        self->pulseCount++;
-    }
-
+    static void pulseCounterISR(void* arg);// Static ISR function to handle pulse counting, takes a void pointer to allow passing the 'this' pointer
 public:
-    FlowSensorFS300A(uint8_t sensorPin) : pin(sensorPin), pulseCount(0), lastTime(0) {}
+    FlowSensorFS300A(int sensorPin, float CFactor = 7.5); // Constructor with default calibration factor
 
-    void begin() {
-        pinMode(pin, INPUT_PULLUP);
-        attachInterruptArg(digitalPinToInterrupt(pin), pulseCounterISR, this, RISING);
-        lastTime = millis();
-    }
+    void begin();// Initialize the sensor pin and attach the interrupt
 
-    String readinfo() override {
-        unsigned long currentTime = millis();
-        unsigned long dt = currentTime - lastTime;
-
-        // compute flow rate every 1 second
-        if (dt >= 1000) {
-            float flowRate = (pulseCount / (dt / 1000.0)) / k; // L/min
-            pulseCount = 0;
-            lastTime = currentTime;
-            return String(flowRate, 2) + " L/min";
-        }
-        return String("Measuring...");
-    }
+    String readinfo() override;// Override the readinfo method to provide flow rate information
 };
 
 #endif
