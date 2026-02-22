@@ -15,11 +15,11 @@ String MoistureSensorV2p0p0::readinfo() { // Override the pure virtual function 
     int sensorValue = analogRead(PIN);// Read the raw sensor value
     String moistureprecent;
     if (sensorValue >= DRY_THRESHOLD) {// If the sensor value is above the dry threshold, it's considered 0% moisture
-        moistureprecent = "0%";
+        moistureprecent = "0";
     } else if (sensorValue <= WET_THRESHOLD) { // If the sensor value is below the wet threshold, it's considered 100% moisture
-        moistureprecent = "100%";
+        moistureprecent = "100";
     } else {
-        moistureprecent = String(map(sensorValue, WET_THRESHOLD, DRY_THRESHOLD, 100, 0)) + "%"; // Map the sensor value to a percentage between 0% and 100% based on the defined thresholds
+        moistureprecent = String(map(sensorValue, WET_THRESHOLD, DRY_THRESHOLD, 100, 0)); // Map the sensor value to a percentage between 0% and 100% based on the defined thresholds
     }
     return moistureprecent;
 }

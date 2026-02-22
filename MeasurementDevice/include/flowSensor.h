@@ -15,7 +15,7 @@ private:
 
     static void pulseCounterISR(void* arg);// Static ISR function to handle pulse counting, takes a void pointer to allow passing the 'this' pointer
 public:
-    FlowSensorFS300A(int sensorPin, float CFactor = 7.5); // Constructor with default calibration factor
+    FlowSensorFS300A(int sensorPin = 35, float CFactor = 7.5); // Constructor with default calibration factor
 
     void begin();// Initialize the sensor pin and attach the interrupt
 

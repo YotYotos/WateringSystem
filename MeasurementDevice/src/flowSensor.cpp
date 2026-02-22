@@ -25,7 +25,7 @@ String FlowSensorFS300A::readinfo() {// Override the readinfo method to provide 
         float flowRate = (pulseCount / (timeDiff / 1000.0)) / CalibrationFactor; // L/min
         pulseCount = 0;// Reset pulse count after calculating flow rate
         lastTime = currentTime;// Update lastTime to current time for the next calculation
-        lastFlowRate = String(flowRate, 2) + " L/min"; // Store the last calculated flow rate as a string with no decimal places
+        lastFlowRate = String(flowRate, 0); // Store the last calculated flow rate as a string with no decimal places
     }
     return lastFlowRate; // Return the last calculated flow rate
 }
